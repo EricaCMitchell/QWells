@@ -12,12 +12,15 @@ from time import process_time
 def main():
     lmax = 10
     nmax = 10
+    Bmax = BMax(lmax,nmax) 
 
-def BZ(lmax,nmax):
-    sph_jn=[]
-    for l in range(0,lmax+1):
-        for n in range(0,nmax+1):
-            zeros.main(lmax,nmax)
-    print(sph_jn)
+def BMax(lmax,nmax):
+    sph_jn_max = []
+    sph_jn_max.append(zeros.main(lmax,nmax))
+    sph_jn_max = np.array(sph_jn_max)
+    return sph_jn_max[-1][-1]
+
+def BZeros(Bmax,lmax):
+    sph_jn = []
 
 main()

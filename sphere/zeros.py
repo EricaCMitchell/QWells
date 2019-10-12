@@ -29,8 +29,8 @@ def Jn_zeros(n,nt):
   return (zerosj)
 
 def main(lmax,nmax):
-    n = int(10)  # n'th spherical bessel function
-    nt = int(10) # number of zeros to be computed
+    n = int(lmax)  # n'th spherical bessel function
+    nt = int(nmax) # number of zeros to be computed
 
     jnz = Jn_zeros(n,nt)[n]
     return jnz
