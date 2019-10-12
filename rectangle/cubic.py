@@ -16,6 +16,7 @@ def main():
     list2 = arrayAnlyt(lim)
     scatterReg(list1[0],list1[1],list2[0],list2[1])   # Creates Cartesian plots of the numerical and analytical solutions
     scatterLog(list1[0],list1[1],list2[0],list2[1])   # Creates logaritmic plots of the numerical and analytical solutions
+    #plt.show()
     plt.show(block=False)
     t1=process_time()
     print("Time elapsed:", t1-t0, "seconds")

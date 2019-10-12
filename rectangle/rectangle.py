@@ -13,12 +13,13 @@ from time import process_time
 def main():
     t0=process_time()
     lim= 60000     # Maximum number of filled Fermi states included
-    a= 1       # Changes side Lx 
-    b= 1       # Changes side Ly
-    c= 100     # Changes side Lz
+    a= int(input("Enter length of side Lx: "))       # Changes side Lx 
+    b= int(input("Enter length of side Ly: "))       # Changes side Ly
+    c= int(input("Enter length of side Lz: "))     # Changes side Lz
     list1 = arrayNumer(lim,a,b,c)     
     list2 = arrayAnlyt(lim)   
     scatterLog(list1[0],list1[1],list2[0],list2[1])  # Creates logarthmic plots of the numerical and analytical solutions
+    #plt.show()
     plt.show(block=False) 
     t1=process_time()
     print("Time elapsed:", t1-t0, "seconds")
