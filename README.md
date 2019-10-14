@@ -6,5 +6,5 @@ Python code for calculating the Fermi energy of quantum wells of differing geome
 - scipy 1.3.1 or higher
 - matplotlib 3.1.1 or higher 
 - python 2.8.0 or higher
-
+- X11 Server
 
