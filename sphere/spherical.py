@@ -11,10 +11,11 @@ from time import process_time
 
 def main():
 #    t0=process_time()
-    lmax = 10
-    nmax = 10
-    Bmax = bMax(lmax,nmax) 
-    Bzeros = bZeros(Bmax,lmax,nmax)
+    lmax = int(input("Enter highest order Bessel function to calculate: "))     # Maximum Bessel function order
+    nmax = int(input("Enter highest order Bessel zero to calculate: "))     # Maximum Bessel zero taken at lmax
+    Bmax = bMax(lmax,nmax)      # Bessel zero at maximum lmax and nmax
+    print("Calculating and creating arrays...")
+    Bzeros = bZeros(Bmax,lmax,nmax)     # Array of Bessel function zeros
     list1 = orderPair(Bzeros)
     list2 = arrayAnlyt(int(list1[0][-1]))
     scatterLog(list1[0],list1[1],list2[0],list2[1])  # Creates logarthmic plots of the numerical and analytical solutions
@@ -34,7 +35,7 @@ def bMax(lmax,nmax):
 # Creates the original array of Bessel zeros 
 def bZeros(Bmax,lmax,nmax):
     sph_jn = []
-    l = lmax
+    l = lmax 
     n = nmax
     while l > -1 :   # Loop calculating which elements from the Bessel zeros array to include
         temp = []
@@ -44,7 +45,7 @@ def bZeros(Bmax,lmax,nmax):
         temp = np.array(temp)
         sph_jn.append(temp)
         l = l - 1
-        n = n + 2   # Tested nmax increase to ensure no state is left out
+        n = n + 5   # Tested nmax increase to ensure no state is left out
     sph_jn = np.array(sph_jn)
     return sph_jn   # 1D Array of Bessel function zeros from largest function to smallest function
 
@@ -53,7 +54,7 @@ def orderPair(Bzeros):
     Bln = []
     for i in range(len(Bzeros)-1,-1,-1):   # Decreasing loop going through the 1D array of bessel functions
         for j in range(0,len(Bzeros[i])):
-            Bln.append(np.array([Bzeros[i][j],abs(i-10),j+1]))
+            Bln.append(np.array([Bzeros[i][j],abs(i-(len(Bzeros)-1)),j+1]))
     Bln = np.array(Bln)
     Bln = Bln[Bln[:,0].argsort()]   # Sorted list based on Bessel zero values from smallest to largest
     FS = filledStates(Bln)   # Call to the filledStates function

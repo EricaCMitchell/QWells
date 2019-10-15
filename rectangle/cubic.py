@@ -12,8 +12,8 @@ from time import process_time
 def main():
     #t0=process_time()
     lim=60000     # Maximum number of filled Fermi states included
+    print("Calculating and creating arrays...")
     list1 = arrayNumer(lim)
-    print(list1)
     list2 = arrayAnlyt(lim)
     scatterReg(list1[0],list1[1],list2[0],list2[1])   # Creates Cartesian plots of the numerical and analytical solutions
     scatterLog(list1[0],list1[1],list2[0],list2[1])   # Creates logaritmic plots of the numerical and analytical solutions

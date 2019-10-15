@@ -16,6 +16,7 @@ def main():
     a= int(input("Enter length of side Lx: "))       # Changes side Lx 
     b= int(input("Enter length of side Ly: "))       # Changes side Ly
     c= int(input("Enter length of side Lz: "))     # Changes side Lz
+    print("Calculating and creating arrays...")
     list1 = arrayNumer(lim,a,b,c)     
     list2 = arrayAnlyt(lim)   
     scatterLog(list1[0],list1[1],list2[0],list2[1])  # Creates logarthmic plots of the numerical and analytical solutions
