@@ -19,6 +19,8 @@ def main():
     list1 = orderPair(Bzeros)
     list2 = arrayAnlyt(int(list1[0][-1]))
     scatterLog(list1[0],list1[1],list2[0],list2[1])  # Creates logarthmic plots of the numerical and analytical solutions
+    list3 = relativeEnergy(list1[0],list1[1])
+    relativePlot(list1[0],list3)
     plt.show()
 #    plt.show(block=False) 
 #    t1=process_time()
@@ -45,7 +47,18 @@ def bZeros(Bmax,lmax,nmax):
         temp = np.array(temp)
         sph_jn.append(temp)
         l = l - 1
-        n = n + 5   # Tested nmax increase to ensure no state is left out
+        n = n + 2   # Tested nmax increase to ensure no state is left out
+    l = lmax + 1
+    while n > 0:   # Loop calculating which elements from the Bessel zeros array to include
+        temp = []
+        for i in range(len(zeros.main(l,n))):
+            if zeros.main(l,n)[i] <= Bmax :     # Condition to assure only values less than or equal to Bmax are included
+                temp.insert(0,zeros.main(l,n)[i])
+        temp = np.array(temp)
+        if len(temp) > 0 :
+            sph_jn.insert(0,temp)
+        l = l + 1
+        n = n - 1
     sph_jn = np.array(sph_jn)
     return sph_jn   # 1D Array of Bessel function zeros from largest function to smallest function
 
@@ -65,16 +78,15 @@ def orderPair(Bzeros):
 def filledStates(ln):
     fs = []
     for i in range(len(ln)):   # Loop over the l and n values
-        l = (2*ln[i][1])+1   # Application of the degeneracies
-        n = l * ln[i][2]   # Accounting for spin-1/2 particles
+        l = (2*int(ln[i][1]))+1   # Application of the degeneracies
         if len(fs) == False:
-            fs.append(int(2*n))
+            fs.append(int(2*l))
         else:
-            fs.append((2*n) + fs[-1])   # Adds all states below it
+            fs.append((2*l) + fs[-1])   # Adds all states below it
     fs = np.array(fs)
     return fs   # 1D array of total number of filled states
 
-# Creates array of the Fermi energy with its number of filled states
+# Creates array of the Fermi energy
 def fermiEnergy(Z):
     fermi = []
     for i in range(len(Z)):   # Loop over the number of Bessel zeros
@@ -90,17 +102,38 @@ def arrayAnlyt(lim):
     for i in range(1,lim):   # Loop to create the analytical results of N^(2/3)
         analytic.append(i**(2/3))
         xvals.append(i)
+    analytic = np.array(analytic)
+    xvals = np.array(xvals)
     return [xvals,analytic]  
+
+# Relative energy difference array
+def relativeEnergy(fs,fermi):
+    rel = [];
+    for i in range(len(fs)):   # Loop calculating the relative energy difference
+        rd = (fermi[i]-(fs[i]**(2/3)))/(fs[i]**(2/3))   # Numerical minus analytical divided by analytical
+        rel.append(rd)
+    rel = np.array(rel)
+    return rel
 
 # Logarithmic plots
 def scatterLog(x1,y1,x2,y2):
-    plot2 = plt.figure(1,figsize=(6,6))
+    plot1 = plt.figure(1,figsize=(12,4))
+    plt.subplot(1,2,1)
     plt.xlabel("N")
     plt.ylabel("Dimensionless Fermi Energy")
     plt.scatter(x1,y1,s=0.5)
     plt.plot(x2,y2,'--')
     plt.xscale('log')
     plt.yscale('log')
-    return plot2   # Returns the info to make a logarithmic plot of numerical results
+    return plot1   # Returns the info to make a logarithmic plot of numerical results
+
+# Relative difference plot
+def relativePlot(x1,y1):
+    plot2 = plt.figure(1,figsize=(12,4))
+    plt.subplot(1,2,2)
+    plt.xlabel("N")
+    plt.ylabel("Relative Energy Difference")
+    plt.scatter(x1,y1,s=0.5)
+    return plot2
 
 main()
