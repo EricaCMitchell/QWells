@@ -12,7 +12,7 @@ from time import process_time
 # Main block to change parameters
 def main():
 #    t0=process_time()
-    lim= 60000     # Maximum number of filled Fermi states included
+    lim= 100000     # Maximum number of filled Fermi states included
     a= int(input("Enter length of side Lx: "))       # Changes side Lx 
     b= int(input("Enter length of side Ly: "))       # Changes side Ly
     c= int(input("Enter length of side Lz: "))     # Changes side Lz

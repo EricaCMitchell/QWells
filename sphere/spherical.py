@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from time import process_time
 
 def main():
-#    t0=process_time()
+    t0=process_time()
     lmax = int(input("Enter highest order Bessel function to calculate: "))     # Maximum Bessel function order
     nmax = int(input("Enter highest order Bessel zero to calculate: "))     # Maximum Bessel zero taken at lmax
     Bmax = bMax(lmax,nmax)      # Bessel zero at maximum lmax and nmax
@@ -21,11 +21,11 @@ def main():
     scatterLog(list1[0],list1[1],list2[0],list2[1])  # Creates logarthmic plots of the numerical and analytical solutions
     list3 = relativeEnergy(list1[0],list1[1])
     relativePlot(list1[0],list3)
-    plt.show()
-#    plt.show(block=False) 
-#    t1=process_time()
-#    print("Time elapsed:", t1-t0, "seconds")
-#    print("Job has completed successfully... Fare thee well")
+#    plt.show()
+    plt.show(block=False) 
+    t1=process_time()
+    print("Time elapsed:", t1-t0, "seconds")
+    print("Job has completed successfully... Fare thee well")
 
 # Creates initial array of Bessel zeros of the lmax function up to the nmax zero and returns the largest value, Bmax
 def bMax(lmax,nmax):
@@ -39,26 +39,36 @@ def bZeros(Bmax,lmax,nmax):
     sph_jn = []
     l = lmax 
     n = nmax
+    j = 0
     while l > -1 :   # Loop calculating which elements from the Bessel zeros array to include
         temp = []
-        for i in range(len(zeros.main(l,n))):
-            if zeros.main(l,n)[i] <= Bmax:     # Condition to assure only values less than or equal to Bmax are included
-                temp.append(zeros.main(l,n)[i])
+        k = zeros.main(l,n)
+        for i in range(len(k)):
+            if k[i] <= Bmax:     # Condition to assure only values less than or equal to Bmax are included
+                temp.append(k[i])
         temp = np.array(temp)
         sph_jn.append(temp)
         l = l - 1
-        n = n + 2   # Tested nmax increase to ensure no state is left out
+        j = j + 1
+        if j == 2:
+            n = n + 1 # Tested nmax increase to ensure no state is left out
+            j = 0
     l = lmax + 1
+    j = 0
     while n > 0:   # Loop calculating which elements from the Bessel zeros array to include
         temp = []
-        for i in range(len(zeros.main(l,n))):
-            if zeros.main(l,n)[i] <= Bmax :     # Condition to assure only values less than or equal to Bmax are included
-                temp.insert(0,zeros.main(l,n)[i])
+        m = zeros.main(l,n)
+        for i in range(len(m)):
+            if m[i] <= Bmax :     # Condition to assure only values less than or equal to Bmax are included
+                temp.append(m[i])
         temp = np.array(temp)
         if len(temp) > 0 :
             sph_jn.insert(0,temp)
         l = l + 1
-        n = n - 1
+        j = j + 1
+        if j==3:
+            n = n - 1
+            j = 0
     sph_jn = np.array(sph_jn)
     return sph_jn   # 1D Array of Bessel function zeros from largest function to smallest function
 

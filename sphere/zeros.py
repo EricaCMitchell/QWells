@@ -14,7 +14,7 @@ from sys import argv
 from pylab import *
 
 def Jn(r,n):
-  return (sqrt(pi/(2*r))*jv(n+0.5,r))
+    return (sqrt(pi/(2*r))*jv(n+0.5,r))
 def Jn_zeros(n,nt):
   zerosj = zeros((n+1, nt))
   zerosj[0] = arange(1,nt+1)*pi
@@ -31,7 +31,6 @@ def Jn_zeros(n,nt):
 def main(lmax,nmax):
     n = int(lmax)  # n'th spherical bessel function
     nt = int(nmax) # number of zeros to be computed
-
     jnz = Jn_zeros(n,nt)[n]
     return jnz
 
