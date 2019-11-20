@@ -35,28 +35,30 @@ def bZeros(mmax,nmax,nzmax,a,L):
     sph_jn = []
     m = mmax
     n = nmax + 2
-    j = 0
     while m > -1 :   # Loop calculating which elements from the Bessel zeros array to include
         temp = []
         k = special.jn_zeros(m,n) 
         for i in range(len(k)):
-            if ((k[i] ** 2) / ((np.pi * (a/L)) ** 2)) <= Fmax:     # Condition to assure only values less than or equal to Bmax are included
+            if ((k[i] ** 2) / ((np.pi * (a/L)) ** 2) + 1) <= Fmax:     # Condition to assure only values less than or equal to Bmax are included
                 temp2 = [m,k[i]]     # Appends both the m value of the Bessel function and the value of the Bessel zero
                 temp.append(np.array(temp2))
         temp = np.array(temp)
-        sph_jn.append(temp)
-        m = m - 1
-        j = j + 1
-        if j == 2:
-            n = n + 1 # Tested nmax increase to ensure no state is left out
-            j = 0
+        if m > 0:
+            m = m - 1
+            sph_jn.append(temp)
+        else:
+            if ((k[-1] ** 2) / ((np.pi * (a/L)) ** 2) + 1)  >= Fmax:
+                np.delete(temp,-1,0)
+                sph_jn.append(temp)
+                break
+        n = n + 1 # Tested nmax increase to ensure no state is left out
     m = mmax + 1
     j = 0
     while n > 0:   # Loop calculating which elements from the Bessel zeros array to include
         temp = []
         l = special.jn_zeros(m,n)
         for i in range(len(l)):
-            if l[i] <= Fmax :     # Condition to assure only values less than or equal to Bmax are included
+            if ((l[i] ** 2) / ((np.pi * (a/L)) ** 2) + 1) <= Fmax :     # Condition to assure only values less than or equal to Bmax are included
                 temp2 =[m,l[i]]      # Appends both the m value of the Bessel function and the value of the Bessel zero
                 temp.append(np.array(temp2))
         temp = np.array(temp)
@@ -118,7 +120,6 @@ def fermiEnergy(Z,a,L,mmax,nmax,nzmax):
             nz = nz + 1
     fermi = np.array(fermi)
     fermi = fermi[fermi[:,0].argsort()]
-    print(fermi)
     return fermi   # 1D Array of the Fermi energy
 
 # Analytical analysis 
