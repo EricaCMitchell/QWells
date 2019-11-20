@@ -70,7 +70,7 @@ def bZeros(Bmax,lmax,nmax):
             n = n - 1
             j = 0
     sph_jn = np.array(sph_jn)
-    return sph_jn   # 1D Array of Bessel function zeros from largest function to smallest function
+    return sph_jn   # Array of Bessel function zeros from largest function to smallest function
 
 # Creates an array with the Bessel zero, function number, and zero number
 def orderPair(Bzeros):
@@ -94,7 +94,7 @@ def filledStates(ln):
         else:
             fs.append((2*l) + fs[-1])   # Adds all states below it
     fs = np.array(fs)
-    return fs   # 1D array of total number of filled states
+    return fs   # 1D Array of total number of filled states
 
 # Creates array of the Fermi energy
 def fermiEnergy(Z):
