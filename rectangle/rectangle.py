@@ -11,7 +11,7 @@ from time import process_time
 
 # Main block to change parameters
 def main():
-#    t0=process_time()
+    t0=process_time()
     lim= 100000     # Maximum number of filled Fermi states included
     a= int(input("Enter length of side Lx: "))       # Changes side Lx 
     b= int(input("Enter length of side Ly: "))       # Changes side Ly
@@ -20,11 +20,11 @@ def main():
     list1 = arrayNumer(lim,a,b,c)     
     list2 = arrayAnlyt(lim)   
     scatterLog(list1[0],list1[1],list2[0],list2[1])  # Creates logarthmic plots of the numerical and analytical solutions
+    t1=process_time()
     plt.show()
-#    plt.show(block=False) 
-#    t1=process_time()
-#    print("Time elapsed:", t1-t0, "seconds")
-#    print("Job has completed successfully... Fare thee well")
+    print("The number of filled states is ",list1[0][-1]," with a Fermi energy of ", list1[1][-1])
+    print("Time elapsed:", t1-t0, "seconds")
+    print("Job has completed successfully... Fare thee well")
 
 # Numerical analysis
 def arrayNumer(lim,a,b,c):

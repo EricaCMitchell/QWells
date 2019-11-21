@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from time import process_time
 
 def main():
-#    t0=process_time()
+    t0=process_time()
     mmax = int(input("Enter highest order Bessel function to calculate: "))     # Maximum Bessel function order
     nmax = int(input("Enter highest order Bessel zero to calculate: "))     # Maximum Bessel zero taken at mmax
     nzmax = int(input("Enter highest value of n to calculate: "))     # Maximum nz value
@@ -19,11 +19,11 @@ def main():
     list1 = orderPair(Bzeros,a,L,mmax,nmax,nzmax)
     list2 = arrayAnlyt(list1[0][-1])
     scatterLog(list1[0],list1[1],list2[0],list2[1])
+    t1=process_time()
     plt.show()
-#    plt.show(block=False) 
-#    t1=process_time()
-#    print("Time elapsed:", t1-t0, "seconds")
-#    print("Job has completed successfully... Fare thee well")
+    print("The number of filled states is ",list1[0][-1]," with a Fermi energy of ", list1[1][-1])
+    print("Time elapsed:", t1-t0, "seconds")
+    print("Job has completed successfully... Fare thee well")
     
 # Creates the original array of Bessel zeros 
 def bZeros(mmax,nmax,nzmax,a,L):

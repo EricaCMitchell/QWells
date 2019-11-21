@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from time import process_time
 
 def main():
-#    t0=process_time()
+    t0=process_time()
     lmax = int(input("Enter highest order Bessel function to calculate: "))     # Maximum Bessel function order
     nmax = int(input("Enter highest order Bessel zero to calculate: "))     # Maximum Bessel zero taken at lmax
     Bmax = bMax(lmax,nmax)      # Bessel zero at maximum lmax and nmax
@@ -21,11 +21,11 @@ def main():
     scatterLog(list1[0],list1[1],list2[0],list2[1])  # Creates logarthmic plots of the numerical and analytical solutions
     list3 = relativeEnergy(list1[0],list1[1])
     relativePlot(list1[0],list3)
+    t1=process_time()
     plt.show()
-#    plt.show(block=False) 
-#    t1=process_time()
-#    print("Time elapsed:", t1-t0, "seconds")
-#    print("Job has completed successfully... Fare thee well")
+    print("The number of filled states is ",list1[0][-1]," with a Fermi energy of ", list1[1][-1])
+    print("Time elapsed:", t1-t0, "seconds")
+    print("Job has completed successfully... Fare thee well")
 
 # Creates initial array of Bessel zeros of the lmax function up to the nmax zero and returns the largest value, Bmax
 def bMax(lmax,nmax):
