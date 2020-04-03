@@ -11,8 +11,10 @@ from time import process_time
 def main():
     t0 = process_time()
     kmax = float(input("Enter number to be multiplied by Pi: " )) * np.pi     # Value of kappa_max
-    Ex = int(input("Enter value for Ex: "))     # Value of xi_x
-    Ey = int(input("Enter value for Ey: "))     # Value of xi_y
+    Ex = float(input("Enter value for Ex: "))     # Value of xi_x
+    Ey = float(input("Enter value for Ey: "))     # Value of xi_y
+    file1 = open('nxnynz.txt','w')     # Creates a file for the nx, ny, and nz values
+    file2 = open('kNk.txt','w')     # Creates a file for the kappa and N(kappa) values
     list1 = loop(kmax,Ex,Ey)     # List of lists containing 1) nx, ny, and nz values and 2) kappa^2 values 
     kNk = pairGen(list1[1],False)     # List of lists containing 1) kappa and N(kappa) and 2) kappa and improved prescription N(kappa) [only calculated if set to True]
     numer = arrayNumer(kNk[0],Ex,Ey)     # List of lists containing numerical approximations containing 1) all terms, 2) volume term, and 3) volume and area terms
@@ -20,6 +22,14 @@ def main():
     scatterPlot(list1[0])     # Function call to make 3d plot of states contributing to N(kappa)
     t1 = process_time()
     plt.show()
+    file1.write("nx ny nz \n")
+    for i in range(len(list1[0])):
+        file1.write(str(list1[0][i]) + "\n")
+    file2.write(" kappa      Nk \n")
+    for i in range(len(kNk[0])):
+        file2.write(str(kNk[0][i]) + "\n")
+    file1.close()
+    file2.close()
     print("Number of states (N(k)):", int(kNk[0][-1][1]))
     print("Time elapsed:", t1 - t0, "seconds") 
     print("Job has completed successfully... Fare thee well")
@@ -37,7 +47,7 @@ def loop(a,b,c):
             nz = 1
             nzok = True
             while nzok != False:
-                k2var = (np.pi ** 2) * ( ((nx ** 2) * (( c / (b ** 2) )**(2/3))) + ((ny ** 2) * (( b / (c ** 2) )**(2/3))) +  ((nz ** 2) * (b * c)) ) 
+                k2var = (np.pi ** 2) * ( ((nx ** 2) * (( c / (b ** 2) )**(2/3))) + ((ny ** 2) * (( b / (c ** 2) )**(2/3))) +  ((nz ** 2) * ((b * c) ** (2/3))) ) 
                 if k2var > (a ** 2):     # Condition assuring that kappa^2 is smaller than kappa_max^2
                     nzok = False
                     if nz == 1:
