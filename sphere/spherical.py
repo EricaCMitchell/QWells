@@ -1,28 +1,27 @@
-#!~/bin/anaconda3/pkgs
+#!/usr/bin/
 
-# Packages
+#Packages
 import sys
+import zeros
 import math
 import numpy as np
-import matplotlib as mpl
+from scipy import special, optimize
 import matplotlib.pyplot as plt
 from time import process_time
 
 def main():
     t0 = process_time()
-    kmax = float(input("Enter number to be multiplied by Pi: " )) * np.pi     # Value of kappa_max
-    Ex = float(input("Enter value for Ex: "))     # Value of xi_x
-    Ey = float(input("Enter value for Ey: "))     # Value of xi_y
-    file1 = open('nxnynz.txt','w')     # Creates a file for the nx, ny, and nz values
+    kmax = float(input("Enter number to be multiplied by Pi: ")) * np.pi #Value of kappa_max
+    file1 = open('nlm.txt','w')     # Creates a file for the nx, ny, and nz values
     file2 = open('kNk.txt','w')     # Creates a file for the kappa and N(kappa) values
-    list1 = loop(kmax,Ex,Ey)     # List of lists containing 1) nx, ny, and nz values and 2) kappa^2 values 
+    list1 = loop(kmax)     # List of lists containing 1) n, l, and m values and 2) kappa^2 values 
     kNk = pairGen(list1[1],False)     # List of lists containing 1) kappa and N(kappa) and 2) kappa and improved prescription N(kappa) [only calculated if set to True]
-    numer = arrayNumer(kNk[0],Ex,Ey)     # List of lists containing numerical approximations containing 1) all terms, 2) volume term, and 3) volume and area terms
+    numer = arrayNumer(kNk[0])     # List of lists containing numerical approximations containing 1) all terms, 2) volume term, and 3) volume and area terms
     regPlot(kNk[0],numer[0],numer[1],numer[2])     # Function call to make 2d plot of N(kappa) vs kappa including plots of numerical approximations
     scatterPlot(list1[0])     # Function call to make 3d plot of states contributing to N(kappa)
     t1 = process_time()
     plt.show()
-    file1.write("nx ny nz \n")
+    file1.write(" n  l  m \n")
     for i in range(len(list1[0])):
         file1.write(str(list1[0][i]) + "\n")
     file2.write(" kappa      Nk \n")
@@ -34,35 +33,30 @@ def main():
     print("Time elapsed:", t1 - t0, "seconds") 
     print("Job has completed successfully... Fare thee well")
 
-# Numerically solves for kappa^2 and records the nx, ny, nz values used to determine it
-def loop(a,b,c):
+# Numerically solves for kappa^2 and records the n, l, m values used to determine it
+def loop(a):
     triplets = []
     k2 = []
-    nx = 1
-    nxok = True
-    while nxok != False:
-        ny = 1
-        nyok = True
-        while nyok != False:
-            nz = 1
-            nzok = True
-            while nzok != False:
-                k2var = (np.pi ** 2) * ( ((nx ** 2) * (( c / (b ** 2) )**(2/3))) + ((ny ** 2) * (( b / (c ** 2) )**(2/3))) +  ((nz ** 2) * ((b * c) ** (2/3))) ) 
-                if k2var > (a ** 2):     # Condition assuring that kappa^2 is smaller than kappa_max^2
-                    nzok = False
-                    if nz == 1:
-                         nyok = False
-                         if ny == 1:
-                             nxok = False
-                         else:
-                             nx += 1
-                    else:
-                        ny += 1
+    n = 1
+    nok = True
+    while nok != False:
+        l = 0
+        lok = True
+        while lok != False:
+            Bln = zeros.main(l,n)
+            k2var = ( (((4 * np.pi) / 3) ** (2/3)) * (Bln[-1] ** 2) )
+            if k2var > (a ** 2):     # Condition assuring that kappa^2 is smaller than kappa_max^2
+                lok = False
+                if l == 0:
+                    nok = False
                 else:
-                    temp = [nx,ny,nz]
+                    n += 1
+            else:
+                for i in range(-l,l+1):
+                    temp = [n,l,i]
                     triplets.append(temp)
-                    k2.append(round(k2var,3))
-                    nz += 1
+                    k2.append(round(k2var,5))
+                l += 1
     triplets = np.array(triplets)
     k2 = np.array(k2)
     return [triplets,k2]     # List of lists containing 1) nx, ny, and nz values and 2) kappa^2 values 
@@ -92,18 +86,18 @@ def pairGen(l,rx):
     pairOG = np.array(pairOG)
     pairRx = np.array(pairRx)
     return [pairOG,pairRx]     # List of lists containing 1) kappa and N(kappa) and 2) kappa and improved prescription N(kappa) [only calculated if set to True]
-
+                            
 # Solves for the numerical approximation to N(kappa) using the averaged asymptotic expression
-def arrayNumer(l,a,b):
+def arrayNumer(l):
     allTerms = []
     vTerm = []
     vsTerms = []
     for i in range(len(l)):
         K = l[i][0]
-        NK3 = ( (K ** 3) / (6 * (np.pi ** 2)) )     # Volume term
-        NK2 = ( ((K ** 2) / (8 * np.pi)) * ( ((a * b) ** (1/3)) + ((b / (a ** 2)) ** (1/3))  + ((a / (b ** 2)) ** (1/3)) ) )     # Area term
-        NK = ( (K / (4 * np.pi)) * ( (((a ** 2) / b) ** (1/3)) + (((b ** 2) / a) ** (1/3)) + ((1 / (a * b)) ** (1/3)) ) )     # First-order term
-        N = NK3 - NK2 + NK - (1 / 8)     # All terms combined
+        NK3 = ( (K ** 3) / (6 * (np.pi ** 2)) ) 
+        NK2 = ( ((3 / (32 * np.pi)) ** (2/3)) * (K ** 2) )
+        NK = ( ((2 / (9 * (np.pi ** 4))) ** (1/3)) * K )
+        N = NK3 - NK2 + NK
         allTerms.append(N)
         vTerm.append(NK3)
         vsTerms.append(NK3 - NK2)
@@ -117,13 +111,13 @@ def scatterPlot(l):
     plot1 = plt.figure(1,figsize=(12,4))
     ax = plot1.add_subplot(121, projection='3d')
     for i in range(len(l)):
-        xs = l[i][0]
-        ys = l[i][1]
-        zs = l[i][2]
+        xs = l[i][2]
+        ys = l[i][0]
+        zs = l[i][1]
         ax.scatter(xs, ys, zs)
-    ax.set_xlabel('n_x')
-    ax.set_ylabel('n_y')
-    ax.set_zlabel('n_z')
+    ax.set_xlabel('m')
+    ax.set_ylabel('n')
+    ax.set_zlabel('l')
     return plot1
 
 # Creates a 2d plot of kappa versus N(kappa), including plots of numerical approximations
