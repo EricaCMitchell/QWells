@@ -18,7 +18,7 @@ def main():
     list1 = loop(kmax,Ex,Ey)     # List of lists containing 1) nx, ny, and nz values and 2) kappa^2 values 
     kNk = pairGen(list1[1],False)     # List of lists containing 1) kappa and N(kappa) and 2) kappa and improved prescription N(kappa) [only calculated if set to True]
     numer = arrayNumer(kNk[0],Ex,Ey)     # List of lists containing numerical approximations containing 1) all terms, 2) volume term, and 3) volume and area terms
-    regPlot(kNk[0],numer[0],numer[1],numer[2])     # Function call to make 2d plot of N(kappa) vs kappa including plots of numerical approximations
+#    regPlot(kNk[0],numer[0],numer[1],numer[2])     # Function call to make 2d plot of N(kappa) vs kappa including plots of numerical approximations
     scatterPlot(list1[0])     # Function call to make 3d plot of states contributing to N(kappa)
     t1 = process_time()
     plt.show()
@@ -61,7 +61,7 @@ def loop(a,b,c):
                 else:
                     temp = [nx,ny,nz]
                     triplets.append(temp)
-                    k2.append(k2var)
+                    k2.append(round(k2var,3))
                     nz += 1
     triplets = np.array(triplets)
     k2 = np.array(k2)
@@ -114,8 +114,8 @@ def arrayNumer(l,a,b):
 
 # Creates a 3d plot of the states contained within the geometry
 def scatterPlot(l):
-    plot1 = plt.figure(1,figsize=(12,4))
-    ax = plot1.add_subplot(121, projection='3d')
+    plot1 = plt.figure(1,figsize=(12,9))
+    ax = plot1.add_subplot(111, projection='3d')
     for i in range(len(l)):
         xs = l[i][0]
         ys = l[i][1]
@@ -133,8 +133,8 @@ def regPlot(l1,l2,l3,l4):
     y2 = [0]
     y3 = [0]
     y4 = [0]
-    plot2 = plt.figure(1,figsize=(12,4))
-    plt.subplot(1,2,2)
+    plot2 = plt.figure(1,figsize=(12,9))
+    plt.subplot(1,1,1)
     for i in range(len(l1)):
         xs.append(l1[i][0])
         y1.append(l1[i][1])
