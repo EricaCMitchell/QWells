@@ -66,10 +66,13 @@ def pairGen(l,rx):
     k2, Nk = np.unique(l,return_counts=True)
     pairOG = [] 
     pairRx = []
+    tolerance = 1.e-4
     for i in range(len(k2)):    # Loop making the ordered pair, (kappa, N(kappa))
         k = math.sqrt(k2[i])
         if i > 0:
             N = temp[1] + Nk[i]
+            if abs(k2[i]-k2[i-1])<tolerance:    # check for possible missed degeneracies
+                print('Possible issue: A degeneracy may have been missed.... ',k2[i-1],' ',k2[i])
         else:
             N = Nk[i]
         temp = [k,N]
